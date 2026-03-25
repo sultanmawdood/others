@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useLocation } from 'react-router';
 import { Search, ShoppingCart, User, Menu, Moon, Sun, X, LogOut, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
@@ -10,6 +10,7 @@ export function Navbar() {
   const { isDark, toggleTheme } = useTheme();
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -17,6 +18,11 @@ export function Navbar() {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const searchInputRef = useRef(null);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     logout();
@@ -85,11 +91,15 @@ export function Navbar() {
       if (userMenuOpen && !event.target.closest('.user-menu')) {
         setUserMenuOpen(false);
       }
+      // Close mobile menu when clicking outside
+      if (mobileMenuOpen && !event.target.closest('nav')) {
+        setMobileMenuOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [userMenuOpen]);
+  }, [userMenuOpen, mobileMenuOpen]);
 
   // Close search on escape key
   useEffect(() => {
@@ -494,25 +504,53 @@ export function Navbar() {
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border">
             <div className="flex flex-col gap-3 sm:gap-4">
-              <Link to="/shop/men" className="hover:text-primary transition-colors text-sm sm:text-base py-1">
+              <Link 
+                to="/shop/men" 
+                className="hover:text-primary transition-colors text-sm sm:text-base py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Men
               </Link>
-              <Link to="/shop/women" className="hover:text-primary transition-colors text-sm sm:text-base py-1">
+              <Link 
+                to="/shop/women" 
+                className="hover:text-primary transition-colors text-sm sm:text-base py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Women
               </Link>
-              <Link to="/shop/shoes" className="hover:text-primary transition-colors text-sm sm:text-base py-1">
+              <Link 
+                to="/shop/shoes" 
+                className="hover:text-primary transition-colors text-sm sm:text-base py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Shoes
               </Link>
-              <Link to="/shop/accessories" className="hover:text-primary transition-colors text-sm sm:text-base py-1">
+              <Link 
+                to="/shop/accessories" 
+                className="hover:text-primary transition-colors text-sm sm:text-base py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Accessories
               </Link>
-              <Link to="/shop/sport-collection" className="hover:text-primary transition-colors text-sm sm:text-base py-1">
+              <Link 
+                to="/shop/sport-collection" 
+                className="hover:text-primary transition-colors text-sm sm:text-base py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Sports
               </Link>
-              <Link to="/shop/ball-collection" className="hover:text-primary transition-colors text-sm sm:text-base py-1">
+              <Link 
+                to="/shop/ball-collection" 
+                className="hover:text-primary transition-colors text-sm sm:text-base py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Balls
               </Link>
-              <Link to="/contact" className="hover:text-primary transition-colors text-sm sm:text-base py-1">
+              <Link 
+                to="/contact" 
+                className="hover:text-primary transition-colors text-sm sm:text-base py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Contact
               </Link>
             </div>
