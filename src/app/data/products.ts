@@ -12,6 +12,7 @@ export interface Product {
   description?: string;
   sizes?: string[];
   colors?: string[];
+  colorImages?: Record<string, string>;
   brand?: string;
 }
 
@@ -33,6 +34,11 @@ export const products: Product[] = [
     description: 'High-performance running shoes designed for speed and comfort. Features advanced cushioning technology and breathable mesh upper.',
     sizes: ['7', '8', '9', '10', '11', '12'],
     colors: ['Black', 'White', 'Red'],
+    colorImages: {
+      'Black': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop',
+      'White': 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=500&h=500&fit=crop',
+      'Red': 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&h=500&fit=crop'
+    },
     brand: 'KingSports',
   },
   {
@@ -49,6 +55,11 @@ export const products: Product[] = [
     description: 'Lightweight training jacket with moisture-wicking fabric. Perfect for outdoor workouts in any weather.',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colors: ['Black', 'Navy', 'Grey'],
+    colorImages: {
+      'Black': 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&h=500&fit=crop',
+      'Navy': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop',
+      'Grey': 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&h=500&fit=crop'
+    },
     brand: 'KingSports',
   },
   {
@@ -67,6 +78,11 @@ export const products: Product[] = [
     description: 'Premium compression leggings with four-way stretch. High-waisted design for maximum comfort and support.',
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
     colors: ['Black', 'Grey', 'Purple'],
+    colorImages: {
+      'Black': 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=500&h=500&fit=crop',
+      'Grey': 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&h=500&fit=crop',
+      'Purple': 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&h=500&fit=crop'
+    },
     brand: 'KingSports',
   },
   {

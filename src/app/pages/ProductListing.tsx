@@ -74,6 +74,20 @@ export function ProductListing() {
   const allBrands = ['KingSports', 'ProAthlete', 'EliteGear', 'SportMax'];
   const allColors = ['Black', 'White', 'Grey', 'Navy', 'Red', 'Blue', 'Pink', 'Purple', 'Green'];
 
+  // Get available colors from current products with counts
+  const availableColors = useMemo(() => {
+    const colorCounts = new Map<string, number>();
+    categoryProducts.forEach(product => {
+      product.colors?.forEach(color => {
+        colorCounts.set(color, (colorCounts.get(color) || 0) + 1);
+      });
+    });
+    return allColors.filter(color => colorCounts.has(color)).map(color => ({
+      name: color,
+      count: colorCounts.get(color) || 0
+    }));
+  }, [categoryProducts]);
+
   const getCategoryTitle = () => {
     if (!category) return 'All Products';
     return category.charAt(0).toUpperCase() + category.slice(1);
@@ -264,19 +278,42 @@ export function ProductListing() {
                   <div>
                     <h4 className="mb-3">Color</h4>
                     <div className="flex flex-wrap gap-2">
-                      {allColors.map((color) => (
-                        <button
-                          key={color}
-                          onClick={() => toggleColor(color)}
-                          className={`px-3 py-1 border transition-colors text-sm ${
-                            selectedColors.includes(color)
-                              ? 'bg-secondary text-secondary-foreground border-secondary'
-                              : 'border-border hover:border-foreground'
-                          }`}
-                        >
-                          {color}
-                        </button>
-                      ))}
+                      {availableColors.map((colorInfo) => {
+                        const color = colorInfo.name;
+                        const count = colorInfo.count;
+                        const colorMap: Record<string, string> = {
+                          'Black': 'bg-black',
+                          'White': 'bg-white border-2 border-gray-300',
+                          'Grey': 'bg-gray-500',
+                          'Navy': 'bg-blue-900',
+                          'Red': 'bg-red-500',
+                          'Blue': 'bg-blue-500',
+                          'Pink': 'bg-pink-500',
+                          'Purple': 'bg-purple-500',
+                          'Green': 'bg-green-500'
+                        };
+                        
+                        return (
+                          <button
+                            key={color}
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              toggleColor(color);
+                            }}
+                            className={`flex items-center gap-2 px-3 py-2 border transition-all text-sm rounded-md cursor-pointer ${
+                              selectedColors.includes(color)
+                                ? 'bg-primary text-primary-foreground border-primary shadow-md scale-105'
+                                : 'border-border hover:border-foreground hover:shadow-sm'
+                            }`}
+                          >
+                            <div className={`w-4 h-4 rounded-full ${colorMap[color] || 'bg-gray-400'} ${color === 'White' ? 'border border-gray-400' : ''}`}></div>
+                            <span>{color}</span>
+                            <span className="text-xs text-muted-foreground ml-1">({count})</span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -303,7 +340,12 @@ export function ProductListing() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
+                <ProductCard 
+                  key={product.id} 
+                  {...product} 
+                  colors={product.colors}
+                  colorImages={product.colorImages}
+                />
               ))}
             </motion.div>
 

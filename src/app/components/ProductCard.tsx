@@ -10,6 +10,8 @@ interface ProductCardProps {
   image: string;
   rating?: number;
   badge?: string;
+  colors?: string[];
+  colorImages?: Record<string, string>;
 }
 
 export function ProductCard({
@@ -20,11 +22,34 @@ export function ProductCard({
   image,
   rating = 4.5,
   badge,
+  colors = [],
+  colorImages = {},
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(colors[0] || '');
   const discount = originalPrice
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
     : 0;
+
+  const currentImage = selectedColor && colorImages[selectedColor] ? colorImages[selectedColor] : image;
+
+  const colorMap: Record<string, string> = {
+    'Black': 'bg-black',
+    'White': 'bg-white border-2 border-gray-300',
+    'Grey': 'bg-gray-500',
+    'Navy': 'bg-blue-900',
+    'Red': 'bg-red-500',
+    'Blue': 'bg-blue-500',
+    'Pink': 'bg-pink-500',
+    'Purple': 'bg-purple-500',
+    'Green': 'bg-green-500',
+    'Brown': 'bg-amber-800',
+    'Orange': 'bg-orange-500',
+    'Yellow': 'bg-yellow-500',
+    'Royal White': 'bg-gradient-to-r from-white to-blue-100 border-2 border-blue-200',
+    'White/Gold': 'bg-gradient-to-r from-white to-yellow-100 border-2 border-yellow-200',
+    'Classic White': 'bg-white border-2 border-gray-200',
+  };
 
   return (
     <Link
@@ -35,9 +60,9 @@ export function ProductCard({
     >
       <div className="relative overflow-hidden bg-muted aspect-square mb-3">
         <img
-          src={image}
-          alt={name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          src={currentImage}
+          alt={`${name} - ${selectedColor || 'Default'}`}
+          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
         />
 
         {badge && (
@@ -49,6 +74,33 @@ export function ProductCard({
         {discount > 0 && (
           <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs">
             -{discount}%
+          </div>
+        )}
+
+        {/* Color Options */}
+        {colors.length > 1 && (
+          <div className="absolute bottom-2 left-2 flex gap-1">
+            {colors.slice(0, 4).map((color) => (
+              <button
+                key={color}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelectedColor(color);
+                }}
+                className={`w-6 h-6 rounded-full border-2 transition-all ${
+                  selectedColor === color
+                    ? 'border-white shadow-lg scale-110'
+                    : 'border-gray-300 hover:border-white hover:scale-105'
+                } ${colorMap[color] || 'bg-gray-400'}`}
+                title={color}
+              />
+            ))}
+            {colors.length > 4 && (
+              <div className="w-6 h-6 rounded-full bg-gray-200 border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-600">
+                +{colors.length - 4}
+              </div>
+            )}
           </div>
         )}
 
@@ -83,6 +135,12 @@ export function ProductCard({
         <h3 className="mb-1 group-hover:text-primary transition-colors line-clamp-2">
           {name}
         </h3>
+
+        {selectedColor && (
+          <p className="text-xs text-muted-foreground mb-1">
+            Color: {selectedColor}
+          </p>
+        )}
 
         <div className="flex items-center gap-2">
           <span className="font-semibold">${price}</span>

@@ -9,6 +9,8 @@ import { Checkout } from "./pages/Checkout";
 import { Account } from "./pages/Account";
 import { Auth } from "./pages/Auth";
 import { Contact } from "./pages/Contact";
+import { ShippingReturns } from "./pages/ShippingReturns";
+import { SizeGuide } from "./pages/SizeGuide";
 import { AdminLogin } from "./pages/admin/AdminLogin";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { NotFound } from "./pages/NotFound";
@@ -25,6 +27,8 @@ export const router = createBrowserRouter([
       { path: "checkout", element: <ProtectedRoute><Checkout /></ProtectedRoute> },
       { path: "account", element: <ProtectedRoute><Account /></ProtectedRoute> },
       { path: "contact", Component: Contact },
+      { path: "shipping-returns", Component: ShippingReturns },
+      { path: "size-guide", Component: SizeGuide },
       { path: "*", Component: NotFound },
     ],
   },
