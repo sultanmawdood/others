@@ -125,7 +125,7 @@ export function Navbar() {
           <div className="flex items-center gap-4 sm:gap-8">
             <Link to="/" className="flex items-center">
               <img 
-                src="/src/assets/Logo.png.png" 
+                src="/logo.png" 
                 alt="KingSports Logo" 
                 className="h-12 sm:h-14 lg:h-16 w-auto object-contain"
                 onError={(e) => {
