@@ -227,4 +227,116 @@
                     localStorage.setItem('refreshToken', data.refreshToken);
                     localStorage.setItem('user', JSON.stringify(data.user));
                     
-                    currentUser = data.user;\n                    showStatus('Login successful!', 'success');\n                    showUserInfo();\n                } else {\n                    showStatus(data.message || 'Login failed', 'error');\n                }\n            } catch (error) {\n                console.error('Login error:', error);\n                showStatus('Network error. Please try again.', 'error');\n            } finally {\n                document.getElementById('loginBtn').disabled = false;\n                document.getElementById('loginBtn').textContent = 'Login';\n            }\n        });\n        \n        // Register form submission\n        document.getElementById('registerForm').addEventListener('submit', async (e) => {\n            e.preventDefault();\n            \n            const formData = new FormData(e.target);\n            const registerData = {\n                name: formData.get('name'),\n                email: formData.get('email'),\n                password: formData.get('password')\n            };\n            \n            try {\n                document.getElementById('registerBtn').disabled = true;\n                document.getElementById('registerBtn').textContent = 'Creating Account...';\n                \n                const response = await fetch(`${API_BASE}/auth/register`, {\n                    method: 'POST',\n                    headers: {\n                        'Content-Type': 'application/json',\n                    },\n                    credentials: 'include',\n                    body: JSON.stringify(registerData)\n                });\n                \n                const data = await response.json();\n                \n                if (response.ok) {\n                    localStorage.setItem('accessToken', data.accessToken);\n                    localStorage.setItem('refreshToken', data.refreshToken);\n                    localStorage.setItem('user', JSON.stringify(data.user));\n                    \n                    currentUser = data.user;\n                    showStatus('Account created successfully!', 'success');\n                    showUserInfo();\n                } else {\n                    showStatus(data.message || 'Registration failed', 'error');\n                }\n            } catch (error) {\n                console.error('Registration error:', error);\n                showStatus('Network error. Please try again.', 'error');\n            } finally {\n                document.getElementById('registerBtn').disabled = false;\n                document.getElementById('registerBtn').textContent = 'Create Account';\n            }\n        });\n        \n        // Logout function\n        async function logout() {\n            try {\n                const token = localStorage.getItem('accessToken');\n                if (token) {\n                    await fetch(`${API_BASE}/auth/logout`, {\n                        method: 'POST',\n                        headers: {\n                            'Authorization': `Bearer ${token}`,\n                        },\n                        credentials: 'include'\n                    });\n                }\n            } catch (error) {\n                console.error('Logout error:', error);\n            } finally {\n                localStorage.removeItem('accessToken');\n                localStorage.removeItem('refreshToken');\n                localStorage.removeItem('user');\n                currentUser = null;\n                showAuthForms();\n                showStatus('Logged out successfully', 'success');\n            }\n        }\n        \n        // Show user info when logged in\n        function showUserInfo() {\n            document.getElementById('authForms').classList.add('hidden');\n            document.getElementById('userInfo').classList.remove('hidden');\n            \n            document.getElementById('userDetails').innerHTML = `\n                <p><strong>Name:</strong> ${currentUser.name}</p>\n                <p><strong>Email:</strong> ${currentUser.email}</p>\n                <p><strong>Role:</strong> ${currentUser.role}</p>\n                <p><strong>ID:</strong> ${currentUser.id}</p>\n            `;\n        }\n        \n        // Show auth forms when not logged in\n        function showAuthForms() {\n            document.getElementById('userInfo').classList.add('hidden');\n            document.getElementById('authForms').classList.remove('hidden');\n        }\n        \n        // Show status messages\n        function showStatus(message, type) {\n            const statusDiv = document.getElementById('status');\n            statusDiv.innerHTML = `<div class=\"status ${type}\">${message}</div>`;\n            setTimeout(() => {\n                statusDiv.innerHTML = '';\n            }, 5000);\n        }\n    </script>\n</body>\n</html>
+                    currentUser = data.user;
+                    showStatus('Login successful!', 'success');
+                    showUserInfo();
+                } else {
+                    showStatus(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showStatus('Network error. Please try again.', 'error');
+            } finally {
+                document.getElementById('loginBtn').disabled = false;
+                document.getElementById('loginBtn').textContent = 'Login';
+            }
+        });
+        
+        // Register form submission
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const registerData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                password: formData.get('password')
+            };
+            
+            try {
+                document.getElementById('registerBtn').disabled = true;
+                document.getElementById('registerBtn').textContent = 'Creating Account...';
+                
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(registerData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    currentUser = data.user;
+                    showStatus('Account created successfully!', 'success');
+                    showUserInfo();
+                } else {
+                    showStatus(data.message || 'Registration failed', 'error');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showStatus('Network error. Please try again.', 'error');
+            } finally {
+                document.getElementById('registerBtn').disabled = false;
+                document.getElementById('registerBtn').textContent = 'Create Account';
+            }
+        });
+        
+        // Logout function
+        async function logout() {
+            try {
+                const token = localStorage.getItem('accessToken');
+                if (token) {
+                    await fetch(`${API_BASE}/auth/logout`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        credentials: 'include'
+                    });
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            } finally {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('user');
+                currentUser = null;
+                showAuthForms();
+                showStatus('Logged out successfully', 'success');
+            }
+        }
+        
+        // Show user info when logged in
+        function showUserInfo() {
+            document.getElementById('authForms').classList.add('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+            
+            document.getElementById('userDetails').innerHTML = `
+                <p><strong>Name:</strong> ${currentUser.name}</p>
+                <p><strong>Email:</strong> ${currentUser.email}</p>
+                <p><strong>Role:</strong> ${currentUser.role}</p>
+                <p><strong>ID:</strong> ${currentUser.id}</p>
+            `;
+        }
+        
+        // Show auth forms when not logged in
+        function showAuthForms() {
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('authForms').classList.remove('hidden');
+        }
+        
+        // Show status messages
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }\n    </script>\n</body>\n</html>

@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# Handle CORS preflight requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# API Routes
+RewriteRule ^api/auth/register$ api/auth.php [L]
+RewriteRule ^api/auth/login$ api/auth.php [L]
+RewriteRule ^api/auth/logout$ api/auth.php [L]
+RewriteRule ^api/products$ api/products.php [L]
+RewriteRule ^api/cart$ api/cart.php [L]
+RewriteRule ^api/orders$ api/orders.php [L]
+
+# Enable CORS
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"

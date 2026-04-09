@@ -1,202 +1,66 @@
-# KingSports E-commerce Backend API
+# E-Commerce PHP Backend with MySQL
 
-Production-ready RESTful API for KingSports e-commerce platform built with Node.js, Express, and MongoDB.
+A complete PHP backend for the e-commerce website using MySQL database and XAMPP.
 
 ## 🚀 Features
+- ✅ User Authentication (Register, Login, Logout)
+- ✅ JWT Token-based Security
+- ✅ Product Management (CRUD)
+- ✅ Shopping Cart System
+- ✅ Order Processing
+- ✅ CORS Enabled
+- ✅ RESTful API Design
 
-- **Clean MVC Architecture** - Organized, scalable, and maintainable code structure
-- **JWT Authentication** - Access tokens and refresh tokens for secure authentication
-- **Role-Based Access Control** - Admin and user roles with protected routes
-- **Advanced Product Filtering** - Filter by category, brand, price, rating, colors, sizes
-- **Pagination & Search** - Efficient data retrieval with text search
-- **Cart System** - Persistent cart storage with user sessions
-- **Order Management** - Complete order lifecycle (pending → paid → shipped → delivered)
-- **Stripe Integration** - Secure payment processing in test mode
-- **Input Validation** - Express-validator for request validation
-- **Security** - Helmet, rate limiting, mongo sanitization, bcrypt password hashing
-- **Error Handling** - Centralized error handling with custom error classes
-- **Logging System** - File-based logging for debugging and monitoring
-
-## 📋 Prerequisites
-
-- Node.js (v14 or higher)
-- MongoDB (v4.4 or higher)
-- npm or yarn
-- Stripe account (for payment integration)
+## 📋 Requirements
+- XAMPP (PHP 7.4+ and MySQL)
+- Web Browser
 
 ## 🛠️ Installation
 
-1. **Clone and navigate to backend directory**
-```bash
-cd backend
+### Step 1: Install XAMPP
+1. Download XAMPP from https://www.apachefriends.org/
+2. Install XAMPP
+3. Open XAMPP Control Panel
+4. Start **Apache** and **MySQL**
+
+### Step 2: Setup Project
+1. Copy the `backend` folder to `C:\xampp\htdocs\`
+   - Final path: `C:\xampp\htdocs\backend\`
+
+### Step 3: Create Database
+**Option A: Using phpMyAdmin (Recommended)**
+1. Open browser and go to: http://localhost/phpmyadmin
+2. Click "Import" tab
+3. Click "Choose File" and select `database.sql` from the backend folder
+4. Click "Go" button at the bottom
+5. Done! Database created with sample data
+
+**Option B: Manual SQL**
+1. Open phpMyAdmin: http://localhost/phpmyadmin
+2. Click "SQL" tab
+3. Copy all content from `database.sql`
+4. Paste into SQL box
+5. Click "Go"
+
+### Step 4: Test Backend
+Open browser and test:
+```
+http://localhost/backend/api/products.php
+```
+You should see a JSON response with products!
+
+## 🔌 API Endpoints
+
+### Base URL
+```
+http://localhost/backend/api/
 ```
 
-2. **Install dependencies**
-```bash
-npm install
-```
+### Authentication
 
-3. **Configure environment variables**
-```bash
-cp .env.example .env
-```
-
-Edit `.env` file with your configuration:
-```env
-NODE_ENV=development
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/kingsports
-JWT_SECRET=your_jwt_secret_key_here
-JWT_REFRESH_SECRET=your_refresh_secret_key_here
-JWT_EXPIRE=7d
-JWT_REFRESH_EXPIRE=30d
-STRIPE_SECRET_KEY=sk_test_your_stripe_key
-FRONTEND_URL=http://localhost:5173
-ADMIN_EMAIL=admin@kingsports.com
-ADMIN_PASSWORD=admin123
-```
-
-4. **Start MongoDB**
-```bash
-# Windows
-net start MongoDB
-
-# macOS/Linux
-sudo systemctl start mongod
-```
-
-5. **Seed the database**
-```bash
-npm run seed
-```
-
-6. **Start the server**
-```bash
-# Development mode with auto-reload
-npm run dev
-
-# Production mode
-npm start
-```
-
-Server will run on `http://localhost:5000`
-
-## 📁 Project Structure
-
-```
-backend/
-├── src/
-│   ├── config/
-│   │   └── database.js          # MongoDB connection
-│   ├── controllers/
-│   │   ├── authController.js    # Authentication logic
-│   │   ├── productController.js # Product CRUD & filtering
-│   │   ├── cartController.js    # Cart management
-│   │   ├── orderController.js   # Order & payment logic
-│   │   └── userController.js    # User management (admin)
-│   ├── middleware/
-│   │   ├── auth.js              # JWT & role verification
-│   │   ├── errorHandler.js      # Centralized error handling
-│   │   └── validation.js        # Request validation rules
-│   ├── models/
-│   │   ├── User.js              # User schema
-│   │   ├── Product.js           # Product schema
-│   │   ├── Cart.js              # Cart schema
-│   │   └── Order.js             # Order schema
-│   ├── routes/
-│   │   ├── authRoutes.js        # Auth endpoints
-│   │   ├── productRoutes.js     # Product endpoints
-│   │   ├── cartRoutes.js        # Cart endpoints
-│   │   ├── orderRoutes.js       # Order endpoints
-│   │   └── userRoutes.js        # User endpoints
-│   ├── utils/
-│   │   ├── appError.js          # Custom error class
-│   │   ├── asyncHandler.js      # Async wrapper
-│   │   ├── logger.js            # Logging utility
-│   │   └── seeder.js            # Database seeder
-│   └── server.js                # Express app & server
-├── logs/                        # Application logs
-├── .env.example                 # Environment template
-├── .gitignore
-├── package.json
-└── README.md
-```
-
-## 🔐 API Endpoints
-
-### Authentication (`/api/auth`)
-
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| POST | `/register` | Public | Register new user |
-| POST | `/login` | Public | Login user |
-| POST | `/refresh` | Public | Refresh access token |
-| POST | `/logout` | Private | Logout user |
-| GET | `/me` | Private | Get current user |
-| PUT | `/profile` | Private | Update profile |
-| PUT | `/password` | Private | Update password |
-
-### Products (`/api/products`)
-
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| GET | `/` | Public | Get all products (with filters) |
-| GET | `/featured` | Public | Get featured products |
-| GET | `/filters` | Public | Get available filters |
-| GET | `/:id` | Public | Get single product |
-| POST | `/` | Admin | Create product |
-| PUT | `/:id` | Admin | Update product |
-| DELETE | `/:id` | Admin | Delete product |
-
-**Product Filters:**
-- `category` - men, women, shoes, accessories
-- `brand` - Filter by brand names
-- `minPrice` & `maxPrice` - Price range
-- `minRating` - Minimum rating
-- `colors` - Comma-separated colors
-- `sizes` - Comma-separated sizes
-- `search` - Text search
-- `sort` - price-asc, price-desc, rating, newest, name
-- `page` & `limit` - Pagination
-
-### Cart (`/api/cart`)
-
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| GET | `/` | Private | Get user cart |
-| POST | `/` | Private | Add item to cart |
-| PUT | `/:itemId` | Private | Update cart item |
-| DELETE | `/:itemId` | Private | Remove item from cart |
-| DELETE | `/` | Private | Clear cart |
-
-### Orders (`/api/orders`)
-
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| POST | `/` | Private | Create order |
-| GET | `/` | Admin | Get all orders |
-| GET | `/my-orders` | Private | Get user orders |
-| GET | `/:id` | Private | Get single order |
-| PUT | `/:id/status` | Admin | Update order status |
-| POST | `/:id/payment` | Private | Create payment intent |
-| PUT | `/:id/pay` | Private | Mark order as paid |
-| PUT | `/:id/cancel` | Private | Cancel order |
-
-### Users (`/api/users`)
-
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| GET | `/` | Admin | Get all users |
-| GET | `/stats` | Admin | Get user statistics |
-| GET | `/:id` | Admin | Get single user |
-| PUT | `/:id` | Admin | Update user |
-| DELETE | `/:id` | Admin | Delete user |
-
-## 📝 Request Examples
-
-### Register User
-```bash
-POST /api/auth/register
+#### Register User
+```http
+POST /api/auth.php (with /register in URL)
 Content-Type: application/json
 
 {
@@ -206,151 +70,321 @@ Content-Type: application/json
 }
 ```
 
-### Login
-```bash
-POST /api/auth/login
+**Response:**
+```json
+{
+  "message": "User registered successfully",
+  "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "customer"
+  }
+}
+```
+
+#### Login
+```http
+POST /api/auth.php (with /login in URL)
 Content-Type: application/json
 
 {
-  "email": "admin@kingsports.com",
+  "email": "admin@example.com",
   "password": "admin123"
 }
 ```
 
-### Get Products with Filters
-```bash
-GET /api/products?category=men&brand=KingSports&minPrice=20&maxPrice=100&sort=price-asc&page=1&limit=12
+#### Logout
+```http
+POST /api/auth.php (with /logout in URL)
+Authorization: Bearer {token}
 ```
 
-### Add to Cart
-```bash
-POST /api/cart
-Authorization: Bearer <token>
+### Products
+
+#### Get All Products
+```http
+GET /api/products.php
+```
+
+#### Get Single Product
+```http
+GET /api/products.php?id=1
+```
+
+#### Create Product (Admin Only)
+```http
+POST /api/products.php
+Authorization: Bearer {admin_token}
 Content-Type: application/json
 
 {
-  "productId": "65f1234567890abcdef12345",
-  "quantity": 2,
-  "size": "M",
-  "color": "Black"
+  "name": "New Product",
+  "description": "Product description",
+  "price": 99.99,
+  "category": "Electronics",
+  "stock": 50,
+  "image_url": "product.jpg"
 }
 ```
 
-### Create Order
-```bash
-POST /api/orders
-Authorization: Bearer <token>
+#### Update Product (Admin Only)
+```http
+PUT /api/products.php
+Authorization: Bearer {admin_token}
 Content-Type: application/json
 
 {
-  "items": [...],
-  "shippingAddress": {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone": "+1234567890",
-    "street": "123 Main St",
-    "city": "New York",
-    "state": "NY",
-    "zipCode": "10001",
-    "country": "USA"
-  },
-  "paymentMethod": "card",
-  "itemsPrice": 100,
-  "shippingPrice": 10,
-  "taxPrice": 8,
-  "totalPrice": 118
+  "id": 1,
+  "name": "Updated Product",
+  "description": "Updated description",
+  "price": 89.99,
+  "category": "Electronics",
+  "stock": 45,
+  "image_url": "product.jpg"
 }
 ```
 
-## 🔒 Security Features
+#### Delete Product (Admin Only)
+```http
+DELETE /api/products.php?id=1
+Authorization: Bearer {admin_token}
+```
 
-- **Helmet** - Sets security HTTP headers
-- **Rate Limiting** - 100 requests per 15 minutes per IP
-- **Mongo Sanitization** - Prevents NoSQL injection
-- **Bcrypt** - Password hashing with salt rounds
-- **JWT** - Secure token-based authentication
-- **CORS** - Configured for frontend origin
-- **Input Validation** - Express-validator on all inputs
+### Cart (Requires Authentication)
 
-## 🧪 Testing with Stripe
+#### Get User Cart
+```http
+GET /api/cart.php
+Authorization: Bearer {token}
+```
 
-Use Stripe test cards:
-- **Success**: 4242 4242 4242 4242
-- **Decline**: 4000 0000 0000 0002
-- Use any future expiry date and any 3-digit CVC
+#### Add to Cart
+```http
+POST /api/cart.php
+Authorization: Bearer {token}
+Content-Type: application/json
 
-## 📊 Default Credentials
+{
+  "product_id": 1,
+  "quantity": 2
+}
+```
 
-After seeding:
-- **Admin**: admin@kingsports.com / admin123
-- **User**: user@example.com / password123
+#### Update Cart Item
+```http
+PUT /api/cart.php
+Authorization: Bearer {token}
+Content-Type: application/json
 
-## 🚀 Production Deployment
+{
+  "id": 1,
+  "quantity": 3
+}
+```
 
-1. Set `NODE_ENV=production` in `.env`
-2. Use strong JWT secrets (generate with `openssl rand -base64 32`)
-3. Configure production MongoDB URI (MongoDB Atlas recommended)
-4. Set up Stripe production keys
-5. Enable HTTPS
-6. Configure proper CORS origins
-7. Set up process manager (PM2 recommended)
-8. Enable MongoDB replica set for transactions
-9. Set up monitoring and logging service
+#### Remove from Cart
+```http
+DELETE /api/cart.php?id=1
+Authorization: Bearer {token}
+```
 
-## 📦 Integration with React Frontend
+#### Clear Cart
+```http
+DELETE /api/cart.php?clear=true
+Authorization: Bearer {token}
+```
 
-1. Set `FRONTEND_URL` in backend `.env`
-2. Use axios or fetch in frontend
-3. Store JWT in localStorage or httpOnly cookies
-4. Include token in Authorization header: `Bearer <token>`
-5. Handle token refresh on 401 responses
-6. Configure CORS properly
+### Orders (Requires Authentication)
 
-Example frontend API service:
+#### Get User Orders
+```http
+GET /api/orders.php
+Authorization: Bearer {token}
+```
+
+#### Get Single Order
+```http
+GET /api/orders.php?id=1
+Authorization: Bearer {token}
+```
+
+#### Create Order
+```http
+POST /api/orders.php
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "shipping_address": "123 Main St, City, Country",
+  "total_amount": 299.99,
+  "items": [
+    {
+      "product_id": 1,
+      "quantity": 2,
+      "price": 99.99
+    }
+  ]
+}
+```
+
+## 🔐 Default Credentials
+
+### Admin Account
+- **Email:** admin@example.com
+- **Password:** admin123
+
+### Sample Products
+The database includes 5 sample products:
+- Laptop ($999.99)
+- Smartphone ($699.99)
+- Headphones ($199.99)
+- T-Shirt ($29.99)
+- Sneakers ($89.99)
+
+## 🌐 Frontend Integration
+
+### Update API Base URL
+In your `auth-demo.html` or frontend code:
 ```javascript
-import axios from 'axios';
-
-const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
-  withCredentials: true
-});
-
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-export default API;
+const API_BASE = 'http://localhost/backend/api';
 ```
 
-## 🐛 Troubleshooting
+### Making API Calls
 
-**MongoDB Connection Error:**
-- Ensure MongoDB is running
-- Check MONGODB_URI in `.env`
-- Verify network connectivity
+**Register/Login:**
+```javascript
+const response = await fetch('http://localhost/backend/api/auth.php', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'password123'
+  })
+});
+```
 
-**JWT Token Errors:**
-- Check JWT_SECRET is set
-- Verify token format in Authorization header
-- Check token expiration
+**Authenticated Requests:**
+```javascript
+const token = localStorage.getItem('accessToken');
 
-**Stripe Payment Errors:**
-- Verify STRIPE_SECRET_KEY is correct
-- Use test mode keys for development
-- Check Stripe dashboard for errors
+const response = await fetch('http://localhost/backend/api/cart.php', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+## 📁 Project Structure
+```
+backend/
+├── api/
+│   ├── auth.php          # Authentication endpoints
+│   ├── products.php      # Product CRUD
+│   ├── cart.php          # Cart management
+│   └── orders.php        # Order processing
+├── config/
+│   └── database.php      # Database connection
+├── models/
+│   ├── User.php          # User model
+│   ├── Product.php       # Product model
+│   ├── Cart.php          # Cart model
+│   └── Order.php         # Order model
+├── middleware/
+│   └── Auth.php          # JWT authentication
+├── .htaccess             # URL rewriting
+├── database.sql          # Database schema
+└── README.md             # This file
+```
+
+## 🔧 Configuration
+
+### Database Settings
+Edit `config/database.php` if needed:
+```php
+private $host = "localhost";
+private $db_name = "ecommerce_db";
+private $username = "root";
+private $password = "";  // Default XAMPP has no password
+```
+
+### JWT Secret Key
+For production, change the secret key in `middleware/Auth.php`:
+```php
+private static $secret_key = "your-secret-key-change-this-in-production";
+```
+
+## ❗ Troubleshooting
+
+### Database Connection Error
+- Make sure MySQL is running in XAMPP Control Panel
+- Check database name is `ecommerce_db`
+- Verify credentials in `config/database.php`
+
+### 404 Not Found
+- Ensure files are in `C:\xampp\htdocs\backend\`
+- Check Apache is running in XAMPP
+- Verify `.htaccess` file exists
+
+### CORS Errors
+- Check CORS headers in API files
+- Ensure `.htaccess` is configured
+- Try accessing from `http://localhost` not `file://`
+
+### Token Errors
+- Check Authorization header format: `Bearer {token}`
+- Verify token is not expired (24 hours)
+- Make sure token is stored correctly
+
+### Can't Import database.sql
+- File too large? Import via SQL tab instead
+- Check MySQL is running
+- Try creating database manually first
+
+## 🔒 Security Notes
+
+### For Production:
+1. Change JWT secret key in `middleware/Auth.php`
+2. Use HTTPS instead of HTTP
+3. Update CORS to allow only your domain
+4. Use environment variables for sensitive data
+5. Enable error logging, disable error display
+6. Add rate limiting
+7. Use prepared statements (already implemented)
+8. Validate and sanitize all inputs
+
+## 📝 Testing with Postman
+
+1. Download Postman: https://www.postman.com/downloads/
+2. Import the API endpoints
+3. Test each endpoint with sample data
+4. Save tokens for authenticated requests
+
+## 🎯 Next Steps
+
+1. ✅ Setup XAMPP and import database
+2. ✅ Test API endpoints
+3. ✅ Update frontend to use new API
+4. ✅ Test authentication flow
+5. ✅ Test cart and orders
+6. 🚀 Deploy to production
+
+## 📞 Support
+
+For issues:
+1. Check XAMPP Apache and MySQL are running
+2. Verify database is imported correctly
+3. Check browser console for errors
+4. Review PHP error logs in `C:\xampp\apache\logs\`
 
 ## 📄 License
-
-MIT
-
-## 👨‍💻 Author
-
-KingSports Development Team
+MIT License
 
 ---
 
-**Happy Coding! 🎉**
+**Made with ❤️ for E-Commerce**
